@@ -1,4 +1,5 @@
-from tweepy import OAuthHandler, Stream
+import json
+from tweepy import OAuthHandler, Stream, API
 from tweepy.streaming import StreamListener
 
 consumer_key = 'vE5TYT1PJx1vqhkp5FAHV6rWd'
@@ -25,11 +26,22 @@ class PrintListener(StreamListener):
 		print('Listern timed out')
 		return True
     
-def main():
+def print_to_console():
 	listener = PrintListener()
 	stream = Stream(auth, listener)
 	languages = ('en',)
 	stream.sample()
+
+def get_tweets(screen_name):
+	api = API(auth)
+	tweets = api.user_timeline(screen_name=screen_name, count=200)
 	
+	for tweet in tweets:
+		print(json.dumps(tweet._json, indent=4))
+	
+def main():
+	#print_to_console()
+	get_tweets(auth.username)
+
 if __name__ == '__main__':
 	main()
