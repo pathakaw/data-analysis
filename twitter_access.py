@@ -11,9 +11,11 @@ auth = OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 
 class PrintListener(StreamListener):
-	def on_status(self, status):
-		print(status.text)
-    	print(status.autthor.screen_name,)
+	
+	def on_status(self, status):	    
+		if not status.text[:3] == 'RT':
+			print(status.text)
+			print(status.autthor.screen_name,)
 		
 	def on_error(self, status_code):
 		print("Error code: {}".format(status_code))
@@ -26,6 +28,7 @@ class PrintListener(StreamListener):
 def main():
 	listener = PrintListener()
 	stream = Stream(auth, listener)
+	languages = ('en',)
 	stream.sample()
 	
 if __name__ == '__main__':
